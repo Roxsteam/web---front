@@ -35,7 +35,7 @@ const [state, formAction, isLoading] = useActionState(signIn, {
     legend="Senha"
     type="password"
     placeholder="123456"
-    defaultValue={String(state?.email)}
+    defaultValue={String(state?.password)}
     />
     
     <Button type="submit" isLoading={isLoading}> Entrar </Button> 
