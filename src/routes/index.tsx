@@ -1,4 +1,7 @@
+
 import { BrowserRouter } from "react-router";
+
+import { useAuth } from "../hooks/useAuth";
 
 import { Loading } from "../components/Loading";
 
@@ -16,6 +19,10 @@ user: {
 
 
 export function Routes(){
+
+const context = useAuth()
+console.log(context)
+
 
 function Route(){
 switch (session?.user.role) {
