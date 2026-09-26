@@ -1,6 +1,8 @@
 import { Input } from "../components/Input"
 import { Button } from "../components/Button"
 
+import { useAuth } from "../hooks/useAuth"
+
 import { useActionState } from "react"
 import { z, ZodError } from "zod"
 import { AxiosError } from "axios"
@@ -16,6 +18,8 @@ export function SignIn() {
 
 const [state, formAction, isLoading] = useActionState(signIn,null)
 
+const auth = useAuth()
+
  async function signIn(_:any, formData: FormData){
    
     try {        
@@ -25,7 +29,8 @@ const [state, formAction, isLoading] = useActionState(signIn,null)
         })
     
         const response = await api.post("/sessions", data)
-        console.log(response.data)
+       auth.save(response.data)
+        
         } 
         
 

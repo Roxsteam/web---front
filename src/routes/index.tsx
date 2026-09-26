@@ -12,16 +12,9 @@ import { ManagerRoutes } from "./ManagerRoutes";
 
 const isLoading = false
 
-const session = {
-user: {
-    role: "" } }
-
-
-
 export function Routes(){
+const {session} = useAuth()
 
-const context = useAuth()
-console.log(context)
 
 
 function Route(){
@@ -39,6 +32,7 @@ switch (session?.user.role) {
 
     if (isLoading) {
         return <Loading />
+        
     }
     return ( 
         <BrowserRouter>        
