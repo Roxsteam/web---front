@@ -10,10 +10,10 @@ import { EmployeeRoutes } from "./EmployeeRoutes";
 import { ManagerRoutes } from "./ManagerRoutes";
 
 
-const isLoading = false
+
 
 export function Routes(){
-const {session} = useAuth()
+const {session, isLoading} = useAuth()
 
 
 
@@ -32,6 +32,7 @@ switch (session?.user.role) {
 
     if (isLoading) {
         return <Loading />
+     
         
     }
     return ( 
