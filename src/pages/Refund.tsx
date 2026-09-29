@@ -31,7 +31,7 @@ const [name, setName] = useState("")
 const [amount, setAmount] = useState("")
 const [category, setCategory] = useState("")
 const [isLoading, setIsLoading] = useState(false)
-const [filename, setFilename] = useState<File | null>(null)
+const [file, setFile] = useState<File | null>(null)
 
 const navigate = useNavigate()
 const params = useParams<{id: string}>()
@@ -45,7 +45,16 @@ if (params.id) {
 }
 
 try {
-setIsLoading(true)  
+setIsLoading(true)
+
+if (!file){
+   return alert("Selecione um arquivo de comprovante")
+}
+
+const fileUploadForm = new FormData()
+fileUploadForm.append("file", file)
+
+const response = await api.post("/uploads", fileUploadForm)
 
 const data = refundSchema.parse({
     name,
@@ -54,7 +63,7 @@ const data = refundSchema.parse({
 })
 
 await api.post("/refunds",
-{...data, filename: "12421354355464562878787.png"})
+{...data, filename: response.data.filename})
 
 navigate("/confirm", {state: {fromSubmit: true}})
 
@@ -125,8 +134,8 @@ font-sm flex items-center justify-center gap-2 my-6 hover:opacity-70 trasition e
 Abrir comprovante</a> 
 :
 <Upload
-filename={filename && filename.name}
-onChange={(e)=> e.target.files && setFilename(e.target.files[0])}
+filename={file && file.name}
+onChange={(e)=> e.target.files && setFile(e.target.files[0])}
 />
 }
 
