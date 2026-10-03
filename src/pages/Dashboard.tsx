@@ -35,7 +35,7 @@ const [refunds, setRefunds] = useState<RefundItemProps[]>([REFUND_EXAMPLE])
 async function fetchRefunds(){
 try {
 
-    const response = await api.get(
+    const response = await api.get<RefundsPaginationAPIResponse>(
     `/refunds?name=${name.trim()}&page=${page}&perPage=${PER_PAGE}`)
     
 console.log(response.data)
