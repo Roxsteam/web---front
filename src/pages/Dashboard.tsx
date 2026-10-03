@@ -14,7 +14,7 @@ import { RefundItem, type RefundItemProps} from "../components/RefundItem"
 import { Pagination } from "../components/Pagination"
 
 
-const PER_PAGE = 5
+const PER_PAGE = 2
 
 export function Dashboard(){
 
@@ -29,7 +29,7 @@ try {
 
     const response = await api.get<RefundsPaginationAPIResponse>(
     `/refunds?name=${name.trim()}&page=${page}&perPage=${PER_PAGE}`)
-    
+    console.log(response.data.pagination)
   setRefunds(
 response.data.refunds.map((refund)=> ({
         id: refund.id,
@@ -38,6 +38,8 @@ response.data.refunds.map((refund)=> ({
         amount: formatCurrency(refund.amount),
         categoryImg: CATEGORIES[refund.category].icon,
   })))
+
+
 
   setTotalOfPage(response.data.pagination.totalPages)
     
@@ -75,7 +77,7 @@ return prevPage
 
 useEffect(()=>{
     fetchRefunds()
-}, [])
+}, [page])
 
     return (
         <div className="bg-gray-500 rounded-xl p-10 md:min-w-[768px]">
