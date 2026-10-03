@@ -14,7 +14,7 @@ import { RefundItem, type RefundItemProps} from "../components/RefundItem"
 import { Pagination } from "../components/Pagination"
 
 
-const PER_PAGE = 2
+const PER_PAGE = 5
 
 export function Dashboard(){
 
