@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
-import {z, ZodError} from "zod"
+import {set, z, ZodError} from "zod"
 import { AxiosError } from "axios"
 
 import { api } from "../services/api"
@@ -12,6 +12,7 @@ import { Input } from "../components/Input"
 import { Select } from "../components/Select"
 import { Upload } from "../components/Upload"
 import { Button } from "../components/Button"
+import { formatCurrency } from "../utils/formatCurrency"
 
 
 
@@ -32,6 +33,7 @@ const [amount, setAmount] = useState("")
 const [category, setCategory] = useState("")
 const [isLoading, setIsLoading] = useState(false)
 const [file, setFile] = useState<File | null>(null)
+const [fileURL, setFileURL] = useState<string | null>(null)
 
 const navigate = useNavigate()
 const params = useParams<{id: string}>()
@@ -84,6 +86,33 @@ navigate("/confirm", {state: {fromSubmit: true}})
     setIsLoading(false)
 } }
 
+async function fetchRefund(id: string) {
+
+try {
+    const {data} = await api.get<RefundAPIResponse>(`/refunds/${id}`)
+   setName(data.name)
+   setAmount(formatCurrency(data.amount))
+   setCategory(data.category)
+   setFileURL(data.filename)
+
+  
+ 
+    
+} catch (error) {
+    console.log(error)
+
+    if(error instanceof AxiosError){
+        return alert(error.response?.data.message)
+    }
+
+    alert("Não foi possível carregar")
+}}
+
+useEffect(()=>{
+if (params.id){
+    fetchRefund(params.id)
+}
+}, [params.id])
 
 return (
 <form 
@@ -127,17 +156,16 @@ onChange={(e)=>setAmount(e.target.value)}
 disabled={!!params.id}/>
 </div>
 
-{
-params.id ? <a href="https://www.google.com/" target="_blank" className="text-sm text-green-100
+{params.id && fileURL ? ( <a href={`http://localhost:3333/uploads/${fileURL}`} target="_blank" className="text-sm text-green-100
 font-sm flex items-center justify-center gap-2 my-6 hover:opacity-70 trasition ease-linear">
 <img src={fileSvg} alt="ícone de arquivo" />
-Abrir comprovante</a> 
-:
-<Upload
+Abrir comprovante</a>
+):(
+    <Upload
 filename={file && file.name}
 onChange={(e)=> e.target.files && setFile(e.target.files[0])}
-/>
-}
+/>)}
+
 
 
 <Button type="submit" isLoading={isLoading}> {params.id ? "Voltar" : "Enviar"} </Button>
